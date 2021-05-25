@@ -1,7 +1,10 @@
+from django.urls import path
 from django.conf.urls import url
 
-from .views import TestimonialView
+from .views import TestimonialListView, TestimonialCreateView, MetaTestView
 
 urlpatterns = [
-    url(r'testimonial', TestimonialView.as_view(), name='testimonial_upload'),
+    #path('', TestimonialListView.as_view(), name='all'),
+    path('create', TestimonialCreateView.as_view(), name='testimonial_create'),
+    path('metatest', MetaTestView.as_view(), name="meta_test")
 ]
