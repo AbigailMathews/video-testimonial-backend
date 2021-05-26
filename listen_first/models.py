@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 import uuid
 
 # Utility function for selecting media save path
@@ -20,12 +22,15 @@ class Testimonial(models.Model):
     media_file = models.FileField(upload_to=testimonial_path, blank=False, null=False)
     media_type = models.CharField(max_length=1, choices=MEDIA_TYPES)
     timestamp = models.DateTimeField(auto_now_add=True)
-    reviewed = models.BooleanField(default=False)
+    review = models.IntegerField(blank=False, null=True, validators=[MaxValueValidator(5), MinValueValidator(1)])
 
     def __str__(self):
-        review_status = 'Reviewed'
-        if self.reviewed == False:
+
+        if not self.review:
             review_status = 'Unreviewed'
+        else:
+            review_status = '%s star reviewed' % (self.review)
+
         if self.media_type == 'A':
             media = 'Audio'
         else:
