@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+#import private_storage.urls
+
 
 urlpatterns = [
     path('', include('listen_first.urls')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    #path('media/', include(private_storage.urls)),
 ]
 
 if settings.DEBUG:

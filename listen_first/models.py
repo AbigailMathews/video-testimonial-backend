@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+#from private_storage.fields import PrivateFileField
 
 import uuid
 
@@ -7,7 +8,7 @@ import uuid
 def testimonial_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/media_type/media_id
     media_id = uuid.uuid4()
-    return '{0}/{1}'.format(instance.media_type, media_id)
+    return '{0}/{1}.webm'.format(instance.media_type, media_id)
 
 # Create your models here.
 class Testimonial(models.Model):
@@ -19,6 +20,7 @@ class Testimonial(models.Model):
 
     participant_id = models.BigIntegerField(blank=False, null=False)
     terms_accepted = models.BooleanField(default=False)
+    #media_file = PrivateFileField(upload_to=testimonial_path, blank=False, null=False)
     media_file = models.FileField(upload_to=testimonial_path, blank=False, null=False)
     media_type = models.CharField(max_length=1, choices=MEDIA_TYPES)
     timestamp = models.DateTimeField(auto_now_add=True)

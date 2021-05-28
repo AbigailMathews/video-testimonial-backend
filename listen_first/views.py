@@ -1,11 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import generics
 from rest_framework import permissions
-from django.http.response import FileResponse
 from django.http import HttpResponseForbidden
+from django_sendfile import sendfile
 
 from .serializers import TestimonialSerializer
 from .models import Testimonial
@@ -34,29 +32,32 @@ class TestimonialListView(generics.ListAPIView):
 class TestimonialCreateView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = TestimonialSerializer
-    permission_classes = [AllowedRequestSourcePermission]
+    permission_classes = [AllowedRequestSourcePermission] # TODO: Switch to API Key
 
 
-class MetaTestView(APIView):
-    def get(self, request, format=None):
-        meta_info = str(request.META)
-        return Response(meta_info, status=status.HTTP_200_OK)
-
-# from rest_framework.decorators import api_view
-
-# @api_view()
-# def meta_test(request):
-#     return Response({"meta": request.META})
+class TestimonialDetailView(generics.RetrieveUpdateAPIView):
+    model = Testimonial
+    serializer_class = TestimonialSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 
-# class TestimonialView(APIView):
-#   parser_classes = (MultiPartParser, FormParser, JSONParser)
+# TODO: Implement fully or delete...
+class SendMediaView(APIView):
 
-#   def post(self, request, *args, **kwargs):
-#     testimonial_serializer = TestimonialSerializer(data=request.data)
-#     if testimonial_serializer.is_valid():
-#       testimonial_serializer.save()
-#       return Response(testimonial_serializer.data, status=status.HTTP_201_CREATED)
-#     else:
-#       return Response(testimonial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseForbidden()
+
+        path = kwargs['type'] + '/' + kwargs['media_file']
+
+        return sendfile(request, path)
+
+
+def download(request, resource):
+    filename = '/media' + resource
+    if request.user.is_staff:
+        return sendfile(request, filename)
+    else:
+        return HttpResponseForbidden()
+
 
