@@ -1,7 +1,6 @@
 from django.urls import path
-from django.conf import urls
 
-from .views import TestimonialListView, TestimonialCreateView, SendMediaView
+from .views import TestimonialCreateView
 
 urlpatterns = [
     #path('', TestimonialListView.as_view(), name='all'),

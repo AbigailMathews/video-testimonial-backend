@@ -18,7 +18,7 @@ class Testimonial(models.Model):
         ('V', 'Video'),
     )
 
-    participant_id = models.BigIntegerField(blank=False, null=False)
+    participant_id = models.CharField(max_length=100, blank=False, null=False)
     terms_accepted = models.BooleanField(default=False)
     media_file = models.FileField(upload_to=testimonial_path, blank=False, null=False)
     media_type = models.CharField(max_length=1, choices=MEDIA_TYPES)

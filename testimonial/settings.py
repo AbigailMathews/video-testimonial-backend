@@ -120,6 +120,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
 ]
 
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # Internationalization
@@ -140,6 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files (video, audio)
 MEDIA_URL = '/media/'
